@@ -21,11 +21,9 @@ from authentication.views import login_view, logout_view
 
 urlpatterns = [
     path('', views.index, name='homepage'),
-    # path('post/<int:post_id>/', views.post_detail),
-    path('author/<int:post_id>/', views.author_detail),
-    # path('addrecipe/', views.recipe_form_view, name="addrecipe"),
     path('login_view/', login_view, name='login'),
     path('signup_view/', views.signup_view, name='signup'),
+    path('author/<int:post_id>/', views.author_detail),
     path('logout_view/', logout_view, name="logout"),
     path('admin/', admin.site.urls),
 ]

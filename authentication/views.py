@@ -18,7 +18,7 @@ def login_view(request):
                     request.GET.get('next', reverse("homepage")))
 
     form = LoginForm()
-    return render(request, 'base.html', {"form": form})
+    return render(request, 'login.html', {"form": form})
 
 
 def logout_view(request):
