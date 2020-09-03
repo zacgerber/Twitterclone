@@ -3,12 +3,12 @@
 {%if request.user.is_authenticated %}
     <h2>Welcome, {{ request.user.username }}!</h2>
     <p>
-        <a href="/logout/"><button>Logout</button></a>
+        <a href="/logout_view/"><button>Logout</button></a>
     </p>
 {% else %}
     <h2>Not welcome</h2>
     <p>
-        <a href="/signup/"><button>Signup</button></a>
-        <a href="/login/"><button>Login</button></a>
+        <a href="/signup_view/"><button>Signup</button></a>
+        <a href="/login_view/"><button>Login</button></a>
     </p>
 {%endif%}

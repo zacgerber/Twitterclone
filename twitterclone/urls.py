@@ -17,14 +17,15 @@ from django.contrib import admin
 from django.urls import path
 
 from twitteruser import views
+from authentication.views import login_view, logout_view
 
 urlpatterns = [
     path('', views.index, name='homepage'),
     # path('post/<int:post_id>/', views.post_detail),
     path('author/<int:post_id>/', views.author_detail),
     # path('addrecipe/', views.recipe_form_view, name="addrecipe"),
-    path('login/', views.login_view, name='loginview'),
-    path('signup/', views.signup_view),
-    path('logout/', views.logout_view, name="logoutview"),
+    path('login_view/', login_view, name='login'),
+    path('signup_view/', views.signup_view, name='signup'),
+    path('logout_view/', logout_view, name="logout"),
     path('admin/', admin.site.urls),
 ]
