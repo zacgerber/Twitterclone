@@ -1,0 +1,10 @@
+<a href="/"><button>Hompage</button></a>
+<div>
+    <h3>Individual Tweets</h3>
+    <ul>
+        <li>
+            <a href="/user_detail_view/{{ tweet.author.id }}/">@ {{ tweet.author.username }}</a> - {{ tweet.post_date }}
+            <p>{{ tweet.body}}</p>
+        </li>
+    </ul>
+</div>

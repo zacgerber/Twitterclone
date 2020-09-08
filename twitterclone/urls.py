@@ -15,15 +15,23 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
+# from django.conf.urls import patterns, url
 
-from twitteruser import views
+from twitteruser.views import signup_view, user_detail_view, index, follow_view, unfollow_view
 from authentication.views import login_view, logout_view
+from tweet.views import create_tweet_view, tweet_detail_view
+from notification.views import notification_view
 
 urlpatterns = [
-    path('', views.index, name='homepage'),
+    path('', index, name='homepage'),
+    path('create_tweet_view/', create_tweet_view, name="createtweet"),
+    path('tweet_detail_view/<int:tweet_id>/', tweet_detail_view, name="tweetdetail"),
+    path('user_detail_view/<int:tweet_id>/', user_detail_view, name="userdetail"),
+    path('notification_view/', notification_view, name="notification"),
     path('login_view/', login_view, name='login'),
-    path('signup_view/', views.signup_view, name='signup'),
-    path('author/<int:post_id>/', views.author_detail),
+    path('signup_view/', signup_view, name='signup'),
     path('logout_view/', logout_view, name="logout"),
+    path('follow_view/<int:follow_id>/', follow_view, name="follow"),
+    path('unfollow_view/<int:unfollow_id>/', unfollow_view, name="unfollow"),
     path('admin/', admin.site.urls),
 ]

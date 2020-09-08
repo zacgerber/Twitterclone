@@ -1,0 +1,16 @@
+
+<h1>Notification</h1>
+
+
+{% for notify in new_notifications %}
+{{notify}}
+{%endfor%}
+
+{%for category in notify%}
+
+<li>
+    sent by: @{{category.message_content.author}}
+    <br>
+    Messages: {{category.message_content}}
+</li>
+{%endfor%}

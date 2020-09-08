@@ -1,8 +1,34 @@
+<a href="/"><button>Hompage</button></a>
+<a href="create_tweet_view/"><button>Tweet</button></a>
+<!-- <a href="/user_detail_view/"><button>Signup</button></a> -->
+<a href="/user_detail_view/{{ request.user.id }}/"><input class="user detail" type="Submit" value="My Profile"></a>
+<a href="notification_view/"><button>Notification</button></a>
+
 <h1>Homepage</h1>
-{{ display }}
 {%if request.user.is_authenticated %}
     <h2>Welcome, {{ request.user.username }}!</h2>
+
+    <h3>Number of Notifications: {{notify}}</h3>
+
+    <div>
+        <h3>Tell Us your thoughts!</h3>
+
+        {% for tweet in twitter_feed %}
+        <ul>
+            <li>
+                <a href="/user_detail_view/{{ tweet.author.id }}/">@ {{ tweet.author.username }}</a> - <a href="/tweet_detail_view/{{tweet.id}}/">{{ tweet.post_date }}</a>
+                <p>{{ tweet.body}}</p>
+            </li>
+        </ul>
+        {%endfor%}
+    </div>
     <p>
         <a href="/logout_view/"><button>Logout</button></a>
     </p>
 {%endif%}
+
+
+<!-- urlpatterns = patterns('notification.views',
+    url(r'^show/(?P<notification_id>\d+)/$', 'show_notification'),
+    url(r'^delete/(?P<notification_id>\d+)/$', 'delete_notification'),
+    ) -->

@@ -9,4 +9,4 @@ class SignupForm(forms.ModelForm):
 
     class Meta:
         model = models.TwitUser
-        fields = ['displayname', 'username']
+        fields = ['displayname']
