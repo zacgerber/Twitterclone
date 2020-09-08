@@ -5,8 +5,8 @@
     <h2>My Tweets</h2>
     {{my_user}}
     {% if my_user != user %}
-    <a href="/following/{{current_user.id}}/">Follow</a>
-    <a href="/unfollowing/{{current_user.id}}/">UnFollow</a>
+    <a href="/follow_view/{{my_user.id}}/">Follow</a>
+    <a href="/unfollow_view/{{my_user.id}}/">UnFollow</a>
     {%endif%}
     <h1>Following: {{follow_count}}</h1>
     <h1>Tweets: {{tweets.count}}</h1>

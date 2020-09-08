@@ -52,7 +52,7 @@ def user_detail_view(request, tweet_id):
 def follow_view(request, follow_id):
     signed_in_user = TwitUser.objects.get(username=request.user.username)
     add_user = TwitUser.objects.filter(id=follow_id).first()
-    signed_in_user .following.add(add_user)
+    signed_in_user.following.add(add_user)
     signed_in_user.save()
     return HttpResponseRedirect(request.META.get('HTTP_REFERER', '/'))
 
@@ -60,6 +60,6 @@ def follow_view(request, follow_id):
 def unfollow_view(request, unfollow_id):
     signed_in_user = TwitUser.objects.get(username=request.user.username)
     remove_user = TwitUser.objects.filter(id=unfollow_id).first()
-    signed_in_user .following.add(remove_user)
+    signed_in_user.following.add(remove_user)
     signed_in_user.save()
     return HttpResponseRedirect(request.META.get('HTTP_REFERER', '/'))
