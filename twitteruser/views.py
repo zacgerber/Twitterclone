@@ -46,7 +46,11 @@ def user_detail_view(request, tweet_id):
     html = "user_detail.html"
     my_user = TwitUser.objects.filter(id=tweet_id).first()
     user_tweets = TweetModel.objects.filter(author=my_user)
-    return render(request, html, {"tweets": user_tweets})
+    follow_count = len(my_user.following.all())
+    return render(
+        request, html, {
+            "user_tweets": user_tweets, "current_user": my_user,
+            "follow_count": follow_count})
 
 
 def follow_view(request, follow_id):

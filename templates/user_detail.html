@@ -1,19 +1,26 @@
 
 
-<div class="container">
+
     <a href="/"><input type="button" value="homepage"></a>
     <h2>My Tweets</h2>
-    {{my_user}}
-    {% if my_user != user %}
-    <a href="/follow_view/{{my_user.id}}/">Follow</a>
-    <a href="/unfollow_view/{{my_user.id}}/">UnFollow</a>
+
+    <h2>User: {{current_user}}</h2>
+
+    <div class="container"></div>
+    {% if current_user != user %}
+    <a href="/follow_view/{{current_user.id}}/">Follow</a>
+    <a href="/unfollow_view/{{current_user.id}}/">UnFollow</a>
     {%endif%}
-    <h1>Following: {{follow_count}}</h1>
-    <h1>Tweets: {{tweets.count}}</h1>
-    <ul>
-        {% for tweet in tweets reversed%}
-        @ {{ tweet.author }} - <a href="/tweet_detail_view/{{ tweet.id }}/">{{ tweet.post_date }}</a>
-        <p>{{ tweet.body}}</p>
+    </div>
+    <div class="container">
+        {% for tweet in user_tweets %}
+        <ul>
+            <li>
+                @ {{ tweet.author }} - <a href="/tweet_detail_view/{{ tweet.id }}/">{{ tweet.post_date }}</a>
+                <p>{{ tweet.body}}</p>
+            </li>
+        </ul>
         {% endfor %}
-    </ul>
-</div>
+    <h3>Number of Tweets: {{ user_tweets.count}}</h3>
+    <h3>Number of Following: {{follow_count}}</h3>
+    </div>
