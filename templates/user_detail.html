@@ -8,15 +8,15 @@
 
     <div class="container"></div>
     {% if current_user != user %}
-    <a href="/follow_view/{{current_user.id}}/">Follow</a>
-    <a href="/unfollow_view/{{current_user.id}}/">UnFollow</a>
+    <a href="/altfollowview/{{current_user.id}}/">Follow</a>
+    <a href="/altunfollowview/{{current_user.id}}/">UnFollow</a>
     {%endif%}
     </div>
     <div class="container">
         {% for tweet in user_tweets %}
         <ul>
             <li>
-                @ {{ tweet.author }} - <a href="/tweet_detail_view/{{ tweet.id }}/">{{ tweet.post_date }}</a>
+                @ {{ tweet.author }} - <a href="/alttweetdetailview/{{ tweet.id }}/">{{ tweet.post_date }}</a>
                 <p>{{ tweet.body}}</p>
             </li>
         </ul>
