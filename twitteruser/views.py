@@ -1,13 +1,15 @@
 from django.shortcuts import render, HttpResponseRedirect, reverse
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import login
+from django.views.generic import TemplateView
+from django.contrib.auth.mixins import LoginRequiredMixin
 
 # from authentication.views import login_view
 from twitteruser.models import TwitUser
 from twitteruser.forms import SignupForm
 from tweet.models import TweetModel
 from notification.models import Notification
-from django.views.generic.base import View
+# from django.views.generic.base import View
 # from django.contrib.auth.models import User
 
 
@@ -42,67 +44,48 @@ def index(request):
 #     return render(request, 'base.html', {"form": form})
 
 
-class SignUpView(View):
-    html = "base.html"
-
+class signup_view(TemplateView):
     def get(self, request):
-        form = SignupForm(request)
-        return render(request, self.html, {"form": form})
+        form = SignupForm()
+        return render(request, "base.html", {"form": form})
 
     def post(self, request):
-        form = SignupForm(request.POST)
-        if form.is_valid():
-            data = form.cleaned_data
-            new_user = TwitUser.objects.create_user(
-                displayname=data.get("displayname"),
-                username=data.get("username"),
-                password=data.get("password")
-            )
-            login(request, new_user)
-            return HttpResponseRedirect(reverse('homepage'))
-        return render(request, self.html, {"form": form})
+        if request.method == "POST":
+            form = SignupForm(request.POST)
+            if form.is_valid():
+                data = form.cleaned_data
+                new_user = TwitUser.objects.create_user(
+                    displayname=data.get("displayname"),
+                    username=data.get("username"),
+                    password=data.get("password")
+                )
+                login(request, new_user)
+                return HttpResponseRedirect(reverse('homepage'))
 
 
-def user_detail_view(request, tweet_id):
-    html = "user_detail.html"
-    my_user = TwitUser.objects.filter(id=tweet_id).first()
-    user_tweets = TweetModel.objects.filter(author=my_user)
-    follow_count = len(my_user.following.all())
-    return render(
-        request, html, {
-            "user_tweets": user_tweets, "current_user": my_user,
-            "follow_count": follow_count})
+class user_detail_view(LoginRequiredMixin, TemplateView):
+    def get(self, request, tweet_id):
+        html = "user_detail.html"
+        my_user = TwitUser.objects.filter(id=tweet_id).first()
+        user_tweets = TweetModel.objects.filter(author=my_user)
+        follow_count = len(my_user.following.all())
+        return render(
+            request, html, {
+                "user_tweets": user_tweets, "current_user": my_user,
+                "follow_count": follow_count})
 
 
-# def follow_view(request, follow_id):
-#     signed_in_user = TwitUser.objects.get(username=request.user.username)
-#     add_user = TwitUser.objects.filter(id=follow_id).first()
-#     signed_in_user.following.add(add_user)
-#     signed_in_user.save()
-#     return HttpResponseRedirect(request.META.get('HTTP_REFERER', '/'))
+def follow_view(request, follow_id):
+    signed_in_user = TwitUser.objects.get(username=request.user.username)
+    add_user = TwitUser.objects.filter(id=follow_id).first()
+    signed_in_user.following.add(add_user)
+    signed_in_user.save()
+    return HttpResponseRedirect(request.META.get('HTTP_REFERER', '/'))
 
 
-class followView(View):
-    def get(self, request, follow_id):
-        signed_in_user = TwitUser.objects.get(username=request.user.username)
-        add_user = TwitUser.objects.filter(id=follow_id).first()
-        signed_in_user.following.add(add_user)
-        signed_in_user.save()
-        return HttpResponseRedirect(request.META.get('HTTP_REFERER', '/'))
-
-
-# def unfollow_view(request, unfollow_id):
-#     signed_in_user = TwitUser.objects.get(username=request.user.username)
-#     remove_user = TwitUser.objects.filter(id=unfollow_id).first()
-#     signed_in_user.following.add(remove_user)
-#     signed_in_user.save()
-#     return HttpResponseRedirect(request.META.get('HTTP_REFERER', '/'))
-
-
-class UnfollowView(View):
-    def get(self, request, unfollow_id):
-        signed_in_user = TwitUser.objects.get(username=request.user.username)
-        remove_user = TwitUser.objects.filter(id=unfollow_id).first()
-        signed_in_user.following.add(remove_user)
-        signed_in_user.save()
-        return HttpResponseRedirect(request.META.get('HTTP_REFERER', '/'))
+def unfollow_view(request, unfollow_id):
+    signed_in_user = TwitUser.objects.get(username=request.user.username)
+    remove_user = TwitUser.objects.filter(id=unfollow_id).first()
+    signed_in_user.following.add(remove_user)
+    signed_in_user.save()
+    return HttpResponseRedirect(request.META.get('HTTP_REFERER', '/'))

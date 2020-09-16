@@ -1,5 +1,7 @@
 from django.shortcuts import render, HttpResponseRedirect, reverse
-from django.contrib.auth.decorators import login_required
+# from django.contrib.auth.decorators import login_required
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.views.generic import TemplateView
 # from django.contrib.auth import login
 
 from tweet.models import TweetModel
@@ -36,30 +38,30 @@ import re
 #     return render(request, 'base.html', {"form": form})
 
 # @login_required
-class CreateTweet(View):
-    html = "base.html"
-
+class create_tweet_view(LoginRequiredMixin, TemplateView):
     def get(self, request):
-        form = TweetForm(request)
-        return render(request, self.html, {"form": form})
+        form = TweetForm()
+        return render(request, 'base.html', {"form": form})
 
     def post(self, request):
-        form = TweetForm(request.POST)
-        if form.is_valid():
-            data = form.cleaned_data
-            tweetpost = TweetModel.objects.create(
-                body=data['body'],
-                author=request.user,
-            )
-            if "@" in data['body']:
-                recipients = re.findall(r'@(\w+)', data.get('body'))
-                for recipient in recipients:
-                    match_user = TwitUser.objects.get(username=recipient)
-                    if match_user:
-                        message = Notification.objects.create(
-                            message_content=tweetpost, receiver=match_user)
-            return HttpResponseRedirect(reverse("homepage"))
-        return render(request, self.html, {"form": form})
+        if request.method == 'POST':
+            form = TweetForm(request.POST)
+            if form.is_valid():
+                data = form.cleaned_data
+                tweetpost = TweetModel.objects.create(
+                    body=data('body'),
+                    author=request.user,
+                )
+                if "@" in data['body']:
+                    recipients = re.findall(r'@(\w+)', data.get('body'))
+                    for recipient in recipients:
+                        match_user = TwitUser.objects.get(username=recipient)
+                        if match_user:
+                            message = Notification.objects.create(
+                                message_content=tweetpost, receiver=match_user)
+                return HttpResponseRedirect(reverse("homepage"))
+            else:
+                return render(request, self.html, {"form": form})
 
 
 # def tweet_detail_view(request, tweet_id):
@@ -68,8 +70,8 @@ class CreateTweet(View):
 #     return render(request, html, {"tweet": tweet_detail})
 
 
-class TweetDetailView(View):
+class tweet_detail_view(View):
     def get(self, request, tweet_id):
-        html = "tweet_deatil.html"
+        html = "tweet_detail.html"
         tweet_detail = TweetModel.objects.filter(id=tweet_id).first()
-        return render(request, html, {"data": tweet_detail})
+        return render(request, html, {"tweet": tweet_detail})
